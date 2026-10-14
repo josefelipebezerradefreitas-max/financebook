@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "FinanceBook",
+    "slug": "financebook",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.financebook.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0E6B57"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.financebook.app"
+    },
+    "plugins": [
+      "expo-notifications"
+    ]
+  }
+}
