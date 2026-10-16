@@ -17,6 +17,7 @@ import NewBillScreen from './src/screens/NewBillScreen';
 import SalaryScreen from './src/screens/SalaryScreen';
 import ValesScreen from './src/screens/ValesScreen';
 import EditBillScreen from './src/screens/EditBillScreen';
+import ImportBackupScreen from './src/screens/ImportBackupScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -68,6 +69,7 @@ export default function App() {
             <Stack.Screen name="Salario" component={SalaryScreen} options={{ title: 'Salário' }} />
             <Stack.Screen name="Vales" component={ValesScreen} options={{ title: 'Vales' }} />
             <Stack.Screen name="EditarConta" component={EditBillScreen} options={{ title: 'Editar conta' }} />
+            <Stack.Screen name="ImportarBackup" component={ImportBackupScreen} options={{ title: 'Importar backup' }} />
           </Stack.Navigator>
         </NavigationContainer>
       </StoreProvider>

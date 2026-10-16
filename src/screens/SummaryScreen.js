@@ -6,7 +6,7 @@ import { Card, MonthNav, PrimaryButton, Screen } from '../ui';
 import { addMonths, money, monthLabel, sameMonth } from '../format';
 import { monthWork } from '../salary';
 
-export default function SummaryScreen() {
+export default function SummaryScreen({ navigation }) {
   const { bills, data, salary, vales } = useStore();
   const [month, setMonth] = useState(new Date());
 
@@ -72,6 +72,7 @@ export default function SummaryScreen() {
       </Card>
 
       <PrimaryButton variant="outline" icon="download" label="Exportar backup" onPress={exportBackup} />
+      <PrimaryButton variant="outline" icon="upload" label="Importar backup" onPress={() => navigation.navigate('ImportarBackup')} />
     </Screen>
   );
 }

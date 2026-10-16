@@ -172,6 +172,35 @@ export function StoreProvider({ children }) {
     [addBill]
   );
 
-  const value = { data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
+  // Troca todos os dados do celular pelos de um backup. Cancela os alertas antigos e
+  // agenda de novo os que ainda estão no futuro.
+  const importBackup = useCallback(async (backup) => {
+    for (const n of ref.current.notes) await cancelAlert(n.notifId);
+    for (const b of ref.current.bills) await cancelAlert(b.notifId);
+    const notes = [];
+    for (const n of backup.notes) {
+      let notifId = null;
+      if (n.alertAt && new Date(n.alertAt).getTime() > Date.now()) {
+        notifId = await scheduleAt(new Date(n.alertAt), n.title, n.text || 'Lembrete');
+      }
+      notes.push({ ...n, notifId });
+    }
+    const bills = [];
+    for (const b of backup.bills) {
+      let notifId = null;
+      if (!b.paid && b.alertDaysBefore !== null && b.alertDaysBefore !== undefined) {
+        const when = billAlertDate(b.dueDate, b.alertDaysBefore);
+        const ms = when.getTime() - Date.now();
+        if (ms > 0 && ms <= ALERT_WINDOW_DAYS * 86400000) {
+          const verb = b.kind === 'receive' ? 'Receber' : 'Pagar';
+          notifId = await scheduleAt(when, `${verb}: ${b.description}`, 'Vencimento da conta');
+        }
+      }
+      bills.push({ ...b, notifId });
+    }
+    setData({ notes, bills, vales: backup.vales, salary: backup.salary });
+  }, []);
+
+  const value = { importBackup, data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
