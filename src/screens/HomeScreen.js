@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../theme';
 import { useStore } from '../store';
-import { Card, FabMenu, Pill, Screen, SectionTitle } from '../ui';
+import { Card, Pill, Screen, SectionTitle } from '../ui';
 import { addMonths, daysUntil, fmtLongToday, fmtShort, fmtTime, money, monthName, sameDay, sameMonth } from '../format';
 import { monthWork, netSalary, totalDeductions } from '../salary';
 
@@ -50,23 +50,12 @@ export default function HomeScreen({ navigation }) {
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
     .slice(0, 3);
 
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const go = (name) => {
-    setMenuOpen(false);
-    navigation.navigate(name);
-  };
-  const menuActions = [
-    { icon: 'file-text', label: 'Nova nota', primary: true, onPress: () => go('NovaNota') },
-    { icon: 'file-plus', label: 'Nova conta', primary: true, onPress: () => go('NovaConta') },
-  ];
-
   const overdue = bills.filter((b) => !b.paid && b.kind === 'pay' && daysUntil(new Date(b.dueDate)) < 0);
 
   return (
     <Screen
       title="Olá!"
       subtitle={fmtLongToday(now)}
-      fab={<FabMenu open={menuOpen} onToggle={() => setMenuOpen((o) => !o)} actions={menuActions} />}
     >
       <View style={st.balance}>
         <Text style={st.balanceLabel}>Saldo previsto do mês</Text>
