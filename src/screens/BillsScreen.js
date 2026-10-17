@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../theme';
 import { useStore } from '../store';
+import { confirmToggle } from '../confirm';
 import { Card, FabMenu, MonthNav, Pill, Screen, Segmented } from '../ui';
 import { addMonths, billStatus, daysUntil, fmtShort, money, monthLabel, sameMonth } from '../format';
 
@@ -90,7 +91,7 @@ export default function BillsScreen({ navigation }) {
         style={[st.row, !last && st.rowBorder]}
       >
         <Pressable
-          onPress={() => togglePaid(b.id)}
+          onPress={() => confirmToggle(b, togglePaid)}
           accessibilityLabel={`Marcar ${b.description} como ${b.kind === 'pay' ? 'paga' : 'recebida'}`}
           style={st.checkHit}
         >

@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../theme';
 import { useStore } from '../store';
+import { confirmToggle } from '../confirm';
 import { Card, FormScreen, Pill } from '../ui';
 import { billStatus, daysUntil, fmtShort, money } from '../format';
 
@@ -40,7 +41,7 @@ export default function OverdueScreen({ navigation }) {
                   style={[st.row, i < list.length - 1 && st.rowBorder]}
                 >
                   <Pressable
-                    onPress={() => togglePaid(b.id)}
+                    onPress={() => confirmToggle(b, togglePaid)}
                     accessibilityLabel={`Marcar ${b.description} como paga`}
                     style={st.checkHit}
                   >
