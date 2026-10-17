@@ -113,7 +113,7 @@ export default function HomeScreen({ navigation }) {
       </Pressable>
 
       {overdue.length > 0 && (
-        <Pressable onPress={() => navigation.navigate('Contas')} style={st.overdueBar}>
+        <Pressable onPress={() => navigation.navigate('Atrasados')} style={st.overdueBar}>
           <Feather name="alert-circle" size={20} color={colors.red} />
           <Text style={[st.overdueText, { flex: 1 }]}>
             Atrasados · {overdue.length} {overdue.length === 1 ? 'conta' : 'contas'}
