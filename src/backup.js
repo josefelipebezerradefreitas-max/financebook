@@ -25,5 +25,8 @@ export function parseBackup(raw) {
     (b) => !b || typeof b.amount !== 'number' || Number.isNaN(new Date(b.dueDate).getTime()) || !b.id
   );
   if (badBill) return { ok: false, error: 'Algumas contas do backup estão com dados inválidos.' };
-  return { ok: true, data: { notes, bills, vales, salary: obj.salary ?? null } };
+  const customCategories = Array.isArray(obj.customCategories)
+    ? obj.customCategories.filter((c) => typeof c === 'string')
+    : [];
+  return { ok: true, data: { notes, bills, vales, salary: obj.salary ?? null, customCategories } };
 }

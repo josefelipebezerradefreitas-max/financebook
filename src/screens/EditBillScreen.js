@@ -3,7 +3,7 @@ import { Alert, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors, categories } from '../theme';
 import { useStore } from '../store';
-import { Card, Chip, DateField, FormScreen, Label, PrimaryButton, Segmented } from '../ui';
+import { Card, Chip, DateField, FormScreen, Label, PrimaryButton, Segmented, CategoryPicker } from '../ui';
 import { parseMoney } from '../format';
 
 const ALERT_OPTIONS = [
@@ -97,11 +97,7 @@ export default function EditBillScreen({ navigation, route }) {
 
       <View>
         <Label>Categoria</Label>
-        <View style={st.chips}>
-          {categories.map((c) => (
-            <Chip key={c} label={c} active={category === c} onPress={() => setCategory(c)} />
-          ))}
-        </View>
+        <CategoryPicker value={category} onChange={setCategory} current={bill?.category} />
       </View>
 
       <Card style={{ padding: 0, overflow: 'hidden' }}>

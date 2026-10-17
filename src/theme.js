@@ -17,4 +17,4 @@ export const colors = {
   grayText: '#3E4C46',
 };
 
-export const categories = ['Moradia', 'Mercado', 'Transporte', 'Saúde', 'Lazer'];
+export const categories = ['Moradia', 'Transporte', 'Saúde', 'Lazer', 'Imposto', 'Investimento'];

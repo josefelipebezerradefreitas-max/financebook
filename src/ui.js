@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Feather } from '@expo/vector-icons';
-import { colors } from './theme';
+import { colors, categories as defaultCategories } from './theme';
+import { useStore } from './store';
 import { fmtDate, fmtTime } from './format';
 
 // Tela com título grande, rolagem e botão flutuante opcional (abas sem cabeçalho).
@@ -123,6 +124,58 @@ export function Chip({ label, active, onPress }) {
   );
 }
 
+// Escolha de categoria: as que já vêm no app, as que você criou e o botão "+ Nova".
+// `current` entra na lista mesmo se a categoria não existir mais (ex.: contas antigas).
+export function CategoryPicker({ value, onChange, current }) {
+  const { customCategories, addCategory } = useStore();
+  const [adding, setAdding] = useState(false);
+  const [name, setName] = useState('');
+  const all = [...defaultCategories, ...customCategories];
+  if (current && !all.some((c) => c.toLowerCase() === current.toLowerCase())) all.push(current);
+
+  const add = () => {
+    const n = name.trim();
+    if (!n) return;
+    const same = all.find((c) => c.toLowerCase() === n.toLowerCase());
+    if (!same) addCategory(n);
+    onChange(same || n);
+    setName('');
+    setAdding(false);
+  };
+
+  return (
+    <View style={{ gap: 10 }}>
+      <View style={s.chipsRow}>
+        {all.map((c) => (
+          <Chip key={c} label={c} active={value === c} onPress={() => onChange(c)} />
+        ))}
+        <Pressable onPress={() => setAdding((a) => !a)} accessibilityLabel="Nova categoria" style={s.chipNew}>
+          <Text style={s.chipText}>+ Nova</Text>
+        </Pressable>
+      </View>
+      {adding && (
+        <View style={s.addRow}>
+          <TextInput
+            autoFocus
+            value={name}
+            onChangeText={setName}
+            placeholder="Nome da categoria"
+            placeholderTextColor={colors.muted}
+            maxLength={24}
+            returnKeyType="done"
+            onSubmitEditing={add}
+            style={s.addInput}
+            accessibilityLabel="Nome da nova categoria"
+          />
+          <Pressable onPress={add} style={s.addBtn}>
+            <Text style={s.addBtnText}>Adicionar</Text>
+          </Pressable>
+        </View>
+      )}
+    </View>
+  );
+}
+
 const tones = {
   red: { bg: colors.redTint, fg: colors.red },
   amber: { bg: colors.amberTint, fg: colors.amber },
@@ -239,6 +292,32 @@ export const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  chipsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  chipNew: {
+    minHeight: 44,
+    paddingHorizontal: 16,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: colors.muted,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  addInput: {
+    flex: 1,
+    height: 48,
+    paddingHorizontal: 14,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: colors.primary,
+    backgroundColor: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.ink,
+  },
+  addBtn: { minHeight: 48, paddingHorizontal: 16, borderRadius: 14, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
+  addBtnText: { fontSize: 14.5, fontWeight: '800', color: '#fff' },
   chipActive: { backgroundColor: colors.primaryTint, borderColor: colors.primary, borderWidth: 1.5 },
   chipText: { fontSize: 13.5, fontWeight: '600', color: colors.ink },
   chipTextActive: { color: colors.primaryDark, fontWeight: '700' },

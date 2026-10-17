@@ -22,7 +22,7 @@ function billAlertDate(dueDate, daysBefore) {
 }
 
 export function StoreProvider({ children }) {
-  const [data, setData] = useState({ notes: [], bills: [], salary: null, vales: [] });
+  const [data, setData] = useState({ notes: [], bills: [], salary: null, vales: [], customCategories: [] });
   const [ready, setReady] = useState(false);
   const ref = useRef(data);
   ref.current = data;
@@ -134,6 +134,11 @@ export function StoreProvider({ children }) {
     setData((d) => ({ ...d, vales: (d.vales || []).filter((v) => v.id !== id) }));
   }, []);
 
+  // Categorias criadas por você (além das que já vêm no app).
+  const addCategory = useCallback((name) => {
+    setData((d) => ({ ...d, customCategories: [...(d.customCategories || []), name] }));
+  }, []);
+
   const saveSalary = useCallback((salary) => {
     setData((d) => ({ ...d, salary }));
   }, []);
@@ -198,9 +203,9 @@ export function StoreProvider({ children }) {
       }
       bills.push({ ...b, notifId });
     }
-    setData({ notes, bills, vales: backup.vales, salary: backup.salary });
+    setData({ notes, bills, vales: backup.vales, salary: backup.salary, customCategories: backup.customCategories });
   }, []);
 
-  const value = { importBackup, data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
+  const value = { importBackup, addCategory, customCategories: data.customCategories || [], data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
