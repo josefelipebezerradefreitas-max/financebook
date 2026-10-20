@@ -3,7 +3,7 @@ import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } fr
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Feather } from '@expo/vector-icons';
-import { colors, categories as defaultCategories } from './theme';
+import { colors, themed, getMode, categories as defaultCategories } from './theme';
 import { useStore } from './store';
 import { fmtDate, fmtTime } from './format';
 
@@ -176,15 +176,15 @@ export function CategoryPicker({ value, onChange, current }) {
   );
 }
 
-const tones = {
+const tones = () => ({
   red: { bg: colors.redTint, fg: colors.red },
   amber: { bg: colors.amberTint, fg: colors.amber },
   gray: { bg: colors.gray, fg: colors.grayText },
   green: { bg: colors.primaryTint, fg: colors.primaryDark },
-};
+});
 
 export function Pill({ label, tone = 'gray', icon }) {
-  const t = tones[tone];
+  const t = tones()[tone];
   return (
     <View style={[s.pill, { backgroundColor: t.bg }]}>
       {icon ? <Feather name={icon} size={13} color={t.fg} /> : null}
@@ -202,7 +202,7 @@ export function Segmented({ options, value, onChange }) {
           onPress={() => onChange(o.value)}
           style={[s.segItem, value === o.value && s.segItemActive]}
         >
-          <Text style={[s.segText, value === o.value && { color: '#fff' }]}>{o.label}</Text>
+          <Text style={[s.segText, value === o.value && { color: colors.onInk }]}>{o.label}</Text>
         </Pressable>
       ))}
     </View>
@@ -263,6 +263,7 @@ export function DateField({ label, value, mode, onChange, last }) {
           value={value}
           mode={mode}
           is24Hour
+          themeVariant={getMode()}
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
           onChange={(_, picked) => {
             setShow(Platform.OS === 'ios');
@@ -274,7 +275,7 @@ export function DateField({ label, value, mode, onChange, last }) {
   );
 }
 
-export const s = StyleSheet.create({
+export const s = themed(() => ({
   headRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   subtitle: { fontSize: 13, color: colors.muted, fontWeight: '500' },
   h1: { fontSize: 30, fontWeight: '800', color: colors.ink, letterSpacing: -0.5 },
@@ -288,7 +289,7 @@ export const s = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -311,7 +312,7 @@ export const s = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1.5,
     borderColor: colors.primary,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     fontSize: 15,
     fontWeight: '600',
     color: colors.ink,
@@ -348,7 +349,7 @@ export const s = StyleSheet.create({
     paddingHorizontal: 16,
   },
   btnSolid: { backgroundColor: colors.primary },
-  btnOutline: { borderWidth: 1.5, borderColor: colors.ink, backgroundColor: '#fff' },
+  btnOutline: { borderWidth: 1.5, borderColor: colors.ink, backgroundColor: colors.card },
   btnText: { fontSize: 15, fontWeight: '800' },
   rowBtn: {
     minHeight: 52,
@@ -382,7 +383,7 @@ export const s = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 4,
@@ -398,9 +399,9 @@ export const s = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.border,
   },
   footer: { position: 'absolute', left: 20, right: 20, bottom: 24 },
-});
+}));

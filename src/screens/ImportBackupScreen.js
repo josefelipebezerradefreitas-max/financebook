@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, FormScreen, Label, PrimaryButton } from '../ui';
 import { parseBackup } from '../backup';
@@ -66,7 +66,7 @@ export default function ImportBackupScreen({ navigation }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   help: { fontSize: 14, fontWeight: '600', color: colors.primaryDark, lineHeight: 20 },
   input: {
     minHeight: 220,
@@ -77,10 +77,10 @@ const st = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     fontSize: 13,
     color: colors.ink,
     textAlignVertical: 'top',
   },
   error: { marginTop: 8, fontSize: 13.5, fontWeight: '700', color: colors.red },
-});
+}));

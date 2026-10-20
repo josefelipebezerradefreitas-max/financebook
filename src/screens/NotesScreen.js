@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, Chip, Fab, Pill, Screen } from '../ui';
 import { fmtShort, fmtTime, sameDay } from '../format';
@@ -73,14 +73,14 @@ export default function NotesScreen({ navigation }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   search: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     height: 48,
     paddingHorizontal: 14,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.line,
@@ -90,4 +90,4 @@ const st = StyleSheet.create({
   title: { fontSize: 16, fontWeight: '700', color: colors.ink },
   text: { fontSize: 13.5, color: colors.muted, marginTop: 2 },
   empty: { fontSize: 14, color: colors.muted },
-});
+}));

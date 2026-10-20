@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors, categories } from '../theme';
+import { colors, themed, categories } from '../theme';
 import { useStore } from '../store';
 import { Card, Chip, DateField, FormScreen, Label, PrimaryButton, Segmented, CategoryPicker } from '../ui';
 import { addMonths, fmtDate, money, parseMoney } from '../format';
@@ -166,7 +166,7 @@ export default function NewBillScreen({ navigation, route }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   amountBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -176,7 +176,7 @@ const st = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
   },
   currency: { fontSize: 20, fontWeight: '700', color: colors.muted },
   amountInput: { flex: 1, fontSize: 32, fontWeight: '800', color: colors.ink },
@@ -186,7 +186,7 @@ const st = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     fontSize: 16,
     fontWeight: '600',
     color: colors.ink,
@@ -219,4 +219,4 @@ const st = StyleSheet.create({
     lineHeight: 19,
     color: colors.grayText,
   },
-});
+}));

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { confirmToggle } from '../confirm';
 import { Card, FabMenu, MonthNav, Pill, Screen, Segmented } from '../ui';
@@ -247,7 +247,7 @@ export default function BillsScreen({ navigation }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   totals: { flexDirection: 'row', justifyContent: 'space-between' },
   totalLabel: { fontSize: 12, fontWeight: '700', color: colors.muted },
   totalValue: { fontSize: 22, fontWeight: '800', color: colors.ink, marginTop: 2 },
@@ -293,7 +293,7 @@ const st = StyleSheet.create({
     height: 48,
     paddingLeft: 14,
     paddingRight: 6,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 14,
     borderWidth: 1.5,
     borderColor: colors.primary,
@@ -302,4 +302,4 @@ const st = StyleSheet.create({
   clear: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   cancel: { minWidth: 44, height: 48, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center' },
   cancelText: { fontSize: 14.5, fontWeight: '800', color: colors.primary },
-});
+}));

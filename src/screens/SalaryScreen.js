@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, Chip, FormScreen, Label, PrimaryButton } from '../ui';
 import { money, parseMoney } from '../format';
@@ -158,7 +158,7 @@ export default function SalaryScreen({ navigation }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   amountBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -168,7 +168,7 @@ const st = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
   },
   currency: { fontSize: 20, fontWeight: '700', color: colors.muted },
   amountInput: { flex: 1, fontSize: 32, fontWeight: '800', color: colors.ink },
@@ -221,4 +221,4 @@ const st = StyleSheet.create({
   divider: { height: 1, backgroundColor: colors.line },
   netLabel: { fontSize: 15, fontWeight: '800', color: colors.ink },
   netValue: { fontSize: 22, fontWeight: '800', color: colors.primary },
-});
+}));

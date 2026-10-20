@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, DateField, FormScreen, Label, MonthNav, PrimaryButton } from '../ui';
 import { addMonths, fmtShort, money, monthLabel, monthName, parseMoney, sameMonth } from '../format';
@@ -132,7 +132,7 @@ export default function ValesScreen() {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   sumRow: { flexDirection: 'row', justifyContent: 'space-between' },
   sumLabel: { fontSize: 14, fontWeight: '600', color: colors.grayText },
   sumValue: { fontSize: 14, fontWeight: '700', color: colors.ink },
@@ -141,9 +141,9 @@ const st = StyleSheet.create({
   netValue: { fontSize: 22, fontWeight: '800', color: colors.primary },
   empty: { fontSize: 14, color: colors.muted },
   amberCard: { backgroundColor: colors.amberTint, flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16 },
-  amberTitle: { fontSize: 15, fontWeight: '800', color: '#5E3D00' },
-  amberSub: { fontSize: 13, color: '#6B4A0A', marginTop: 2 },
-  amberValue: { fontSize: 20, fontWeight: '800', color: '#5E3D00' },
+  amberTitle: { fontSize: 15, fontWeight: '800', color: colors.onAmber },
+  amberSub: { fontSize: 13, color: colors.onAmberSub, marginTop: 2 },
+  amberValue: { fontSize: 20, fontWeight: '800', color: colors.onAmber },
   amountBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -153,7 +153,7 @@ const st = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
   },
   currency: { fontSize: 18, fontWeight: '700', color: colors.muted },
   amountInput: { flex: 1, fontSize: 26, fontWeight: '800', color: colors.ink },
@@ -163,7 +163,7 @@ const st = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     fontSize: 15,
     color: colors.ink,
   },
@@ -172,4 +172,4 @@ const st = StyleSheet.create({
   rowTitle: { fontSize: 15, fontWeight: '700', color: colors.ink },
   rowSub: { fontSize: 12.5, color: colors.muted, marginTop: 2 },
   trash: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-});
+}));

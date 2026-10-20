@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, DateField, FormScreen, Label, PrimaryButton } from '../ui';
 
@@ -101,14 +101,14 @@ export default function NewNoteScreen({ navigation, route }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   input: {
     height: 52,
     paddingHorizontal: 14,
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     fontSize: 16,
     fontWeight: '600',
     color: colors.ink,
@@ -118,4 +118,4 @@ const st = StyleSheet.create({
   border: { borderBottomWidth: 1, borderBottomColor: colors.line },
   rowLabel: { fontSize: 15, fontWeight: '600', color: colors.ink },
   help: { fontSize: 12.5, lineHeight: 18, color: colors.muted, marginTop: 8 },
-});
+}));

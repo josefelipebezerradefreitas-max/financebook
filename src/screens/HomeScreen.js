@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, Pill, Screen, SectionTitle } from '../ui';
 import { addMonths, daysUntil, fmtLongToday, fmtShort, fmtTime, money, monthName, sameDay, sameMonth } from '../format';
@@ -170,7 +170,7 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   overdueBar: {
     minHeight: 48,
     paddingHorizontal: 16,
@@ -181,7 +181,7 @@ const st = StyleSheet.create({
     gap: 8,
     justifyContent: 'space-between',
   },
-  overdueText: { fontSize: 14.5, fontWeight: '700', color: '#7A2414' },
+  overdueText: { fontSize: 14.5, fontWeight: '700', color: colors.onRed },
   balance: { backgroundColor: colors.primary, borderRadius: 24, padding: 20 },
   balanceLabel: { fontSize: 13, color: '#CFEBE2', fontWeight: '600' },
   balanceValue: { fontSize: 36, fontWeight: '800', color: '#fff', marginTop: 4, letterSpacing: -0.5 },
@@ -199,4 +199,4 @@ const st = StyleSheet.create({
   time: { fontSize: 13, fontWeight: '700' },
   upRow: { padding: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   upBorder: { borderBottomWidth: 1, borderBottomColor: colors.line },
-});
+}));

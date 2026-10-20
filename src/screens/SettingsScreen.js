@@ -1,9 +1,10 @@
 import React from 'react';
 import { Pressable, Share, StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
-import { Card, Screen } from '../ui';
+import { Card, Screen, Segmented } from '../ui';
+import { useTheme } from '../themeContext';
 
 function Row({ icon, title, sub, right, onPress, last }) {
   const body = (
@@ -23,6 +24,7 @@ function Row({ icon, title, sub, right, onPress, last }) {
 
 export default function SettingsScreen({ navigation }) {
   const { data } = useStore();
+  const { pref, setPref } = useTheme();
 
   // Backup simples: abre a folha de compartilhar do celular com todos os dados em JSON.
   const exportBackup = () =>
@@ -32,6 +34,23 @@ export default function SettingsScreen({ navigation }) {
 
   return (
     <Screen title="Configurações">
+      <View>
+        <Text style={st.group}>Aparência</Text>
+        <Card style={{ gap: 10 }}>
+          <Text style={st.title}>Tema</Text>
+          <Segmented
+            value={pref}
+            onChange={setPref}
+            options={[
+              { value: 'light', label: 'Claro' },
+              { value: 'dark', label: 'Noturno' },
+              { value: 'auto', label: 'Automático' },
+            ]}
+          />
+          <Text style={st.sub}>Automático segue o modo escuro do celular.</Text>
+        </Card>
+      </View>
+
       <View>
         <Text style={st.group}>Alertas</Text>
         <Card style={{ padding: 0, overflow: 'hidden' }}>
@@ -56,6 +75,13 @@ export default function SettingsScreen({ navigation }) {
             right={chevron}
             onPress={() => navigation.navigate('ImportarBackup')}
           />
+          <Row
+            icon="trash-2"
+            title="Apagar dados antigos"
+            sub="Por mês e ano, para deixar o app mais leve"
+            right={chevron}
+            onPress={() => navigation.navigate('ApagarDados')}
+          />
           <Row icon="lock" title="Onde ficam os dados" sub="Só neste celular, sem internet" last />
         </Card>
       </View>
@@ -63,7 +89,7 @@ export default function SettingsScreen({ navigation }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   group: { fontSize: 12.5, fontWeight: '700', color: colors.muted, marginBottom: 6 },
   row: { minHeight: 64, paddingHorizontal: 14, paddingVertical: 12, flexDirection: 'row', alignItems: 'center', gap: 14 },
   border: { borderBottomWidth: 1, borderBottomColor: colors.line },
@@ -71,4 +97,4 @@ const st = StyleSheet.create({
   title: { fontSize: 15, fontWeight: '700', color: colors.ink },
   sub: { fontSize: 13, color: colors.muted, marginTop: 2 },
   on: { fontSize: 13, fontWeight: '700', color: colors.primary },
-});
+}));

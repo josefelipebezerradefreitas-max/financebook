@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { confirmToggle } from '../confirm';
 import { Card, FormScreen, Pill } from '../ui';
@@ -69,7 +69,7 @@ export default function OverdueScreen({ navigation }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   bar: {
     minHeight: 48,
     paddingHorizontal: 16,
@@ -79,7 +79,7 @@ const st = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  barText: { fontSize: 14.5, fontWeight: '700', color: '#7A2414' },
+  barText: { fontSize: 14.5, fontWeight: '700', color: colors.onRed },
   sort: { fontSize: 13, fontWeight: '600', color: colors.muted },
   empty: { fontSize: 14, color: colors.muted },
   hint: { fontSize: 12.5, color: colors.muted, textAlign: 'center' },
@@ -90,4 +90,4 @@ const st = StyleSheet.create({
   name: { fontSize: 15, fontWeight: '700', color: colors.ink },
   sub: { fontSize: 12.5, color: colors.muted, marginTop: 2 },
   amount: { fontSize: 15, fontWeight: '700', color: colors.ink },
-});
+}));

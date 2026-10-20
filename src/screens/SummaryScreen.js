@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, MonthNav, Screen } from '../ui';
 import { addMonths, money, monthLabel, sameMonth } from '../format';
@@ -70,7 +70,7 @@ export default function SummaryScreen() {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => ({
   balance: { backgroundColor: colors.primary, borderRadius: 22, paddingVertical: 18, paddingHorizontal: 20 },
   balanceLabel: { fontSize: 13, color: '#CFEBE2', fontWeight: '600' },
   balanceValue: { fontSize: 34, fontWeight: '800', color: '#fff', marginTop: 2, letterSpacing: -0.5 },
@@ -83,4 +83,4 @@ const st = StyleSheet.create({
   catValue: { fontSize: 13.5, fontWeight: '700', color: colors.ink },
   track: { height: 8, borderRadius: 4, backgroundColor: colors.track, marginTop: 6, overflow: 'hidden' },
   fill: { height: '100%', backgroundColor: colors.primary },
-});
+}));

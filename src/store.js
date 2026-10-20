@@ -206,6 +206,21 @@ export function StoreProvider({ children }) {
     setData({ notes, bills, vales: backup.vales, salary: backup.salary, customCategories: backup.customCategories });
   }, []);
 
-  const value = { importBackup, addCategory, customCategories: data.customCategories || [], data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
+  // Apaga de uma vez as contas, anotações e vales escolhidos (veja purge.js).
+  const purge = useCallback(async ({ billIds, noteIds, valeIds }) => {
+    const bills = new Set(billIds);
+    const notes = new Set(noteIds);
+    const vales = new Set(valeIds);
+    for (const b of ref.current.bills) if (bills.has(b.id)) await cancelAlert(b.notifId);
+    for (const n of ref.current.notes) if (notes.has(n.id)) await cancelAlert(n.notifId);
+    setData((d) => ({
+      ...d,
+      bills: d.bills.filter((b) => !bills.has(b.id)),
+      notes: d.notes.filter((n) => !notes.has(n.id)),
+      vales: (d.vales || []).filter((v) => !vales.has(v.id)),
+    }));
+  }, []);
+
+  const value = { purge, importBackup, addCategory, customCategories: data.customCategories || [], data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
