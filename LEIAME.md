@@ -52,7 +52,8 @@ Precisa do [Node.js](https://nodejs.org) instalado e do app **Expo Go** no celul
 - **Contas:** a pagar e a receber, por mês, marcar como paga, repetir todo mês ou parcelar (de 2 a 60 vezes, uma conta por parcela, no mesmo dia de cada mês), aviso de 0 a 3 dias antes às 09:00. O botão de menu (três linhas) abre três opções em arco: nova conta (papel com +), editar (lápis; toque na conta para editar ou apagar, e a tela de edição tem o botão "Apagar conta") e pesquisar (busca por nome, categoria ou valor, em todos os meses).
 - **Salário:** cartão na tela Início abre a tela de salário bruto, dia do pagamento e descontos (valor em R$ ou % do bruto), com o líquido calculado. O líquido entra nas receitas de todos os meses. Os descontos são digitados por você; o app não calcula INSS nem imposto de renda sozinho.
 - **Vales:** cartão "Vales do mês" no Início abre a tela de vales. Cada vale (valor, data e observação) é descontado automaticamente do salário do mês seguinte. A tela mostra o salário líquido, os vales do mês anterior que estão sendo descontados e o salário a receber. No saldo, o vale entra como dinheiro recebido no mês em que foi pego, e o desconto reduz o salário do mês seguinte.
-- **Resumo:** receitas, despesas, saldo e gráfico por categoria. O botão "Exportar backup" abre a folha de compartilhar com todos os dados em JSON.
+- **Resumo:** receitas, despesas, saldo e gráfico por categoria. Sem botões de backup aqui.
+- **Config.:** aba com engrenagem. Mostra os alertas por notificação e o backup (exportar e importar).
 
 ## Observações
 

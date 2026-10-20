@@ -12,6 +12,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import NotesScreen from './src/screens/NotesScreen';
 import BillsScreen from './src/screens/BillsScreen';
 import SummaryScreen from './src/screens/SummaryScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
 import NewNoteScreen from './src/screens/NewNoteScreen';
 import NewBillScreen from './src/screens/NewBillScreen';
 import SalaryScreen from './src/screens/SalaryScreen';
@@ -23,7 +24,7 @@ import OverdueScreen from './src/screens/OverdueScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const icons = { Início: 'home', Notas: 'file-text', Contas: 'credit-card', Resumo: 'bar-chart-2' };
+const icons = { Início: 'home', Notas: 'file-text', Contas: 'credit-card', Resumo: 'bar-chart-2', Config: 'settings' };
 
 function Tabs() {
   return (
@@ -40,6 +41,7 @@ function Tabs() {
       <Tab.Screen name="Notas" component={NotesScreen} />
       <Tab.Screen name="Contas" component={BillsScreen} />
       <Tab.Screen name="Resumo" component={SummaryScreen} />
+      <Tab.Screen name="Config" component={SettingsScreen} options={{ title: 'Config.' }} />
     </Tab.Navigator>
   );
 }

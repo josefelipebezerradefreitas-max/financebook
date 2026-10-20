@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Share, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../theme';
 import { useStore } from '../store';
-import { Card, MonthNav, PrimaryButton, Screen } from '../ui';
+import { Card, MonthNav, Screen } from '../ui';
 import { addMonths, money, monthLabel, sameMonth } from '../format';
 import { monthWork } from '../salary';
 
-export default function SummaryScreen({ navigation }) {
-  const { bills, data, salary, vales } = useStore();
+export default function SummaryScreen() {
+  const { bills, salary, vales } = useStore();
   const [month, setMonth] = useState(new Date());
 
   const inMonth = bills.filter((b) => sameMonth(new Date(b.dueDate), month));
@@ -20,10 +20,6 @@ export default function SummaryScreen({ navigation }) {
     byCategory[b.category] = (byCategory[b.category] || 0) + b.amount;
   });
   const rows = Object.entries(byCategory).sort((a, b) => b[1] - a[1]);
-
-  // Backup simples: abre a folha de compartilhar do celular com todos os dados em JSON.
-  const exportBackup = () =>
-    Share.share({ title: 'Backup FinanceBook', message: JSON.stringify(data, null, 2) });
 
   return (
     <Screen title="Resumo">
@@ -70,9 +66,6 @@ export default function SummaryScreen({ navigation }) {
           })
         )}
       </Card>
-
-      <PrimaryButton variant="outline" icon="download" label="Exportar backup" onPress={exportBackup} />
-      <PrimaryButton variant="outline" icon="upload" label="Importar backup" onPress={() => navigation.navigate('ImportarBackup')} />
     </Screen>
   );
 }
