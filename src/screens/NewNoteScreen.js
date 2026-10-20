@@ -4,8 +4,6 @@ import { Feather } from '@expo/vector-icons';
 import { colors } from '../theme';
 import { useStore } from '../store';
 import { Card, DateField, FormScreen, Label, PrimaryButton } from '../ui';
-import { fmtDate, fmtTime } from '../format';
-import { shareEmail, shareWhatsApp } from '../share';
 
 function defaultAlert() {
   const d = new Date();
@@ -33,11 +31,6 @@ export default function NewNoteScreen({ navigation, route }) {
     x.setHours(d.getHours(), d.getMinutes(), 0, 0);
     setWhen(x);
   };
-
-  const message = () =>
-    [title, text, alertOn ? `Lembrete: ${fmtDate(when)} às ${fmtTime(when)}` : '']
-      .filter(Boolean)
-      .join('\n');
 
   const save = async () => {
     if (!title.trim()) return Alert.alert('Falta o título', 'Dê um título para a anotação.');
@@ -98,28 +91,8 @@ export default function NewNoteScreen({ navigation, route }) {
             </>
           )}
         </Card>
-      </View>
-
-      <View>
-        <Label>Enviar este lembrete</Label>
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-          <PrimaryButton
-            variant="outline"
-            icon="message-circle"
-            label="WhatsApp"
-            style={{ flex: 1 }}
-            onPress={() => shareWhatsApp(message())}
-          />
-          <PrimaryButton
-            variant="outline"
-            icon="mail"
-            label="E-mail"
-            style={{ flex: 1 }}
-            onPress={() => shareEmail(title || 'Lembrete', message())}
-          />
-        </View>
         <Text style={st.help}>
-          Ao tocar, o app abre o WhatsApp ou o e-mail com a mensagem pronta. Você só confirma o envio.
+          No dia e hora escolhidos, o celular mostra o aviso na barra de notificações, mesmo com o app fechado.
         </Text>
       </View>
 
