@@ -43,6 +43,7 @@ export default function NewBillScreen({ navigation, route }) {
 
     if (installments) {
       // Uma conta por parcela, cada uma no seu mês, com o mesmo valor.
+      const group = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
       await addBills(
         Array.from({ length: count }, (_, i) => ({
           kind,
@@ -53,7 +54,7 @@ export default function NewBillScreen({ navigation, route }) {
           repeat: 'none',
           alertDaysBefore: alertDays,
           paid: false,
-          installment: { n: i + 1, of: count },
+          installment: { n: i + 1, of: count, group },
         }))
       );
     } else {

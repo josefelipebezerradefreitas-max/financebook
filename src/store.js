@@ -126,6 +126,13 @@ export function StoreProvider({ children }) {
     setData((d) => ({ ...d, bills: d.bills.filter((b) => b.id !== id) }));
   }, []);
 
+  // Apaga várias contas de uma vez (por exemplo, todas as parcelas).
+  const deleteBills = useCallback(async (ids) => {
+    const set = new Set(ids);
+    for (const b of ref.current.bills) if (set.has(b.id)) await cancelAlert(b.notifId);
+    setData((d) => ({ ...d, bills: d.bills.filter((b) => !set.has(b.id)) }));
+  }, []);
+
   const addVale = useCallback((vale) => {
     setData((d) => ({ ...d, vales: [{ ...vale, id: uid() }, ...(d.vales || [])] }));
   }, []);
@@ -221,6 +228,6 @@ export function StoreProvider({ children }) {
     }));
   }, []);
 
-  const value = { purge, importBackup, addCategory, customCategories: data.customCategories || [], data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
+  const value = { deleteBills, purge, importBackup, addCategory, customCategories: data.customCategories || [], data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

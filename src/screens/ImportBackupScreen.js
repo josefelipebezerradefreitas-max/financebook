@@ -4,14 +4,26 @@ import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, FormScreen, Label, PrimaryButton } from '../ui';
 import { parseBackup } from '../backup';
+import { pickBackupFile } from '../backupFile';
 
 export default function ImportBackupScreen({ navigation }) {
   const { importBackup, notes, bills } = useStore();
   const [text, setText] = useState('');
   const [error, setError] = useState('');
 
-  const run = () => {
-    const res = parseBackup(text);
+  const choose = async () => {
+    try {
+      const raw = await pickBackupFile();
+      if (raw === null) return;
+      setText(raw);
+      run(raw);
+    } catch (e) {
+      setError('Não consegui abrir esse arquivo.');
+    }
+  };
+
+  const run = (raw = text) => {
+    const res = parseBackup(raw);
     if (!res.ok) {
       setError(res.error);
       return;
@@ -38,14 +50,14 @@ export default function ImportBackupScreen({ navigation }) {
   };
 
   return (
-    <FormScreen footer={<PrimaryButton icon="upload" label="Importar backup" onPress={run} />}>
+    <FormScreen footer={<PrimaryButton icon="file" label="Escolher arquivo de backup" onPress={choose} />}>
       <Card style={{ backgroundColor: colors.primaryTint }}>
         <Text style={st.help}>
-          Cole aqui o texto que você guardou com "Exportar backup". Segure o dedo no campo e toque em Colar.
+          Toque em "Escolher arquivo de backup" e selecione o arquivo .json que você salvou com "Exportar backup".
         </Text>
       </Card>
       <View>
-        <Label>Texto do backup</Label>
+        <Label>Ou cole o texto do backup</Label>
         <TextInput
           value={text}
           onChangeText={(v) => {
@@ -61,6 +73,7 @@ export default function ImportBackupScreen({ navigation }) {
           accessibilityLabel="Texto do backup"
         />
         {error ? <Text style={st.error}>{error}</Text> : null}
+        {text.trim() ? <PrimaryButton variant="outline" icon="upload" label="Importar texto colado" onPress={() => run()} style={{ marginTop: 10 }} /> : null}
       </View>
     </FormScreen>
   );
@@ -69,8 +82,8 @@ export default function ImportBackupScreen({ navigation }) {
 const st = themed(() => ({
   help: { fontSize: 14, fontWeight: '600', color: colors.primaryDark, lineHeight: 20 },
   input: {
-    minHeight: 220,
-    maxHeight: 360,
+    minHeight: 140,
+    maxHeight: 260,
     paddingHorizontal: 14,
     paddingTop: 12,
     paddingBottom: 12,

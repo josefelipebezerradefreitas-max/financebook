@@ -1,10 +1,11 @@
 import React from 'react';
-import { Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, Screen, Segmented } from '../ui';
 import { useTheme } from '../themeContext';
+import { exportBackupFile } from '../backupFile';
 
 function Row({ icon, title, sub, right, onPress, last }) {
   const body = (
@@ -26,9 +27,14 @@ export default function SettingsScreen({ navigation }) {
   const { data } = useStore();
   const { pref, setPref } = useTheme();
 
-  // Backup simples: abre a folha de compartilhar do celular com todos os dados em JSON.
-  const exportBackup = () =>
-    Share.share({ title: 'Backup FinanceBook', message: JSON.stringify(data, null, 2) });
+  // Gera um arquivo .json e abre a folha de compartilhar para você salvar onde quiser.
+  const exportBackup = async () => {
+    try {
+      await exportBackupFile(data);
+    } catch (e) {
+      Alert.alert('Não foi possível gerar o backup', String(e?.message || e));
+    }
+  };
 
   const chevron = <Feather name="chevron-right" size={20} color={colors.muted} />;
 
@@ -67,11 +73,11 @@ export default function SettingsScreen({ navigation }) {
       <View>
         <Text style={st.group}>Seus dados</Text>
         <Card style={{ padding: 0, overflow: 'hidden' }}>
-          <Row icon="download" title="Exportar backup" sub="Enviar uma cópia dos dados para outro app" right={chevron} onPress={exportBackup} />
+          <Row icon="download" title="Exportar backup" sub="Gerar um arquivo para salvar ou enviar" right={chevron} onPress={exportBackup} />
           <Row
             icon="upload"
             title="Importar backup"
-            sub="Colar uma cópia e trazer os dados para cá"
+            sub="Escolher o arquivo e trazer os dados para cá"
             right={chevron}
             onPress={() => navigation.navigate('ImportarBackup')}
           />

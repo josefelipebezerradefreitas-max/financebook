@@ -5,6 +5,7 @@ import { colors, themed, categories } from '../theme';
 import { useStore } from '../store';
 import { Card, Chip, DateField, FormScreen, Label, PrimaryButton, Segmented, CategoryPicker } from '../ui';
 import { parseMoney } from '../format';
+import { installmentGroup } from '../installments';
 
 const ALERT_OPTIONS = [
   { label: 'Sem aviso', value: null },
@@ -15,7 +16,7 @@ const ALERT_OPTIONS = [
 ];
 
 export default function EditBillScreen({ navigation, route }) {
-  const { bills, updateBill, deleteBill } = useStore();
+  const { bills, updateBill, deleteBill, deleteBills } = useStore();
   const bill = bills.find((b) => b.id === route.params?.id);
 
   const [kind, setKind] = useState(bill?.kind || 'pay');
@@ -45,18 +46,41 @@ export default function EditBillScreen({ navigation, route }) {
     navigation.goBack();
   };
 
-  const remove = () =>
+  const remove = () => {
+    const group = installmentGroup(bills, bill);
+    const confirmOne = {
+      text: group.length > 1 ? 'Só esta' : 'Apagar',
+      style: 'destructive',
+      onPress: async () => {
+        await deleteBill(bill.id);
+        navigation.goBack();
+      },
+    };
+    if (group.length > 1) {
+      // Conta parcelada: oferece apagar as outras parcelas junto.
+      Alert.alert(
+        'Apagar conta parcelada',
+        `"${bill.description}" é uma das ${group.length} parcelas. O que você quer apagar?`,
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          confirmOne,
+          {
+            text: `Todas as ${group.length} parcelas`,
+            style: 'destructive',
+            onPress: async () => {
+              await deleteBills(group.map((b) => b.id));
+              navigation.goBack();
+            },
+          },
+        ]
+      );
+      return;
+    }
     Alert.alert('Apagar conta', `Apagar "${bill.description}"? Essa ação não pode ser desfeita.`, [
       { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Apagar',
-        style: 'destructive',
-        onPress: async () => {
-          await deleteBill(bill.id);
-          navigation.goBack();
-        },
-      },
+      confirmOne,
     ]);
+  };
 
   return (
     <FormScreen footer={<PrimaryButton label="Salvar alterações" onPress={save} />}>
