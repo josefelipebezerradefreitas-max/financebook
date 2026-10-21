@@ -57,7 +57,7 @@ export default function HomeScreen({ navigation }) {
       title="Olá!"
       subtitle={fmtLongToday(now)}
     >
-      <View style={st.balance}>
+      <Pressable onPress={() => navigation.navigate('Resumo')} accessibilityLabel="Abrir o resumo" style={st.balance}>
         <Text style={st.balanceLabel}>Saldo previsto do mês</Text>
         <Text style={st.balanceValue}>{money(income - expense)}</Text>
         <View style={st.balanceRow}>
@@ -70,7 +70,7 @@ export default function HomeScreen({ navigation }) {
             <Text style={st.balanceBoxValue}>{money(expense)}</Text>
           </View>
         </View>
-      </View>
+      </Pressable>
 
       <Pressable onPress={() => navigation.navigate('Salario')}>
         <Card style={st.itemRow}>

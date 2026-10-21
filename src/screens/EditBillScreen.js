@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors, themed, categories } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, Chip, DateField, FormScreen, Label, PrimaryButton, Segmented, CategoryPicker } from '../ui';
 import { parseMoney } from '../format';
@@ -16,13 +16,13 @@ const ALERT_OPTIONS = [
 ];
 
 export default function EditBillScreen({ navigation, route }) {
-  const { bills, updateBill, deleteBill, deleteBills } = useStore();
+  const { bills, updateBill, deleteBill, deleteBills, setBillsCategory, allCategories } = useStore();
   const bill = bills.find((b) => b.id === route.params?.id);
 
   const [kind, setKind] = useState(bill?.kind || 'pay');
   const [amount, setAmount] = useState(bill ? String(bill.amount).replace('.', ',') : '');
   const [description, setDescription] = useState(bill?.description || '');
-  const [category, setCategory] = useState(bill?.category || categories[0]);
+  const [category, setCategory] = useState(bill?.category || allCategories[0] || '');
   const [due, setDue] = useState(bill ? new Date(bill.dueDate) : new Date());
   const [paid, setPaid] = useState(!!bill?.paid);
   const [alertDays, setAlertDays] = useState(bill ? bill.alertDaysBefore ?? null : 1);
@@ -43,6 +43,25 @@ export default function EditBillScreen({ navigation, route }) {
       paid,
       alertDaysBefore: alertDays,
     });
+    // Conta parcelada com categoria nova: pergunta se vale para as outras parcelas.
+    const others = installmentGroup(bills, bill).filter((b) => b.id !== bill.id && b.category !== category);
+    if (category !== bill.category && others.length > 0) {
+      Alert.alert(
+        'Mudar nas outras parcelas?',
+        `Esta conta tem mais ${others.length} parcela(s). Quer mudar a categoria delas para "${category}" também?`,
+        [
+          { text: 'Só esta', style: 'cancel', onPress: () => navigation.goBack() },
+          {
+            text: `Todas as parcelas`,
+            onPress: async () => {
+              await setBillsCategory(others.map((b) => b.id), category);
+              navigation.goBack();
+            },
+          },
+        ]
+      );
+      return;
+    }
     navigation.goBack();
   };
 

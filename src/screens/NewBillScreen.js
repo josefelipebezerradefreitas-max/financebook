@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors, themed, categories } from '../theme';
+import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, Chip, DateField, FormScreen, Label, PrimaryButton, Segmented, CategoryPicker } from '../ui';
 import { addMonths, fmtDate, money, parseMoney } from '../format';
@@ -21,11 +21,11 @@ const REPEAT_OPTIONS = [
 ];
 
 export default function NewBillScreen({ navigation, route }) {
-  const { addBill, addBills } = useStore();
+  const { addBill, addBills, allCategories } = useStore();
   const [kind, setKind] = useState(route.params?.kind || 'pay');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState(categories[0]);
+  const [category, setCategory] = useState(allCategories[0] || '');
   const [due, setDue] = useState(new Date());
   const [repeat, setRepeat] = useState('none');
   const [count, setCount] = useState(2);

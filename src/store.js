@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { cancelAlert, scheduleAt } from './notifications';
 import { addMonths } from './format';
+import { categories as defaultCategories } from './theme';
 
 // Todos os dados ficam neste único objeto JSON. Mais para frente, é este mesmo
 // objeto que será sincronizado com o arquivo na pasta oculta do Google Drive.
@@ -22,7 +23,7 @@ function billAlertDate(dueDate, daysBefore) {
 }
 
 export function StoreProvider({ children }) {
-  const [data, setData] = useState({ notes: [], bills: [], salary: null, vales: [], customCategories: [] });
+  const [data, setData] = useState({ notes: [], bills: [], salary: null, vales: [], customCategories: [], hiddenCategories: [] });
   const [ready, setReady] = useState(false);
   const ref = useRef(data);
   ref.current = data;
@@ -141,9 +142,37 @@ export function StoreProvider({ children }) {
     setData((d) => ({ ...d, vales: (d.vales || []).filter((v) => v.id !== id) }));
   }, []);
 
-  // Categorias criadas por você (além das que já vêm no app).
+  // Categorias: as que já vêm no app, menos as que você apagou, mais as que você criou.
+  const lower = (x) => String(x).toLowerCase();
+  const hidden = data.hiddenCategories || [];
+  const allCategories = [
+    ...defaultCategories.filter((c) => !hidden.some((h) => lower(h) === lower(c))),
+    ...(data.customCategories || []),
+  ];
+
   const addCategory = useCallback((name) => {
-    setData((d) => ({ ...d, customCategories: [...(d.customCategories || []), name] }));
+    setData((d) => {
+      const hid = d.hiddenCategories || [];
+      const wasHidden = hid.find((h) => lower(h) === lower(name));
+      if (wasHidden) return { ...d, hiddenCategories: hid.filter((h) => h !== wasHidden) };
+      const exists = [...defaultCategories, ...(d.customCategories || [])].some((c) => lower(c) === lower(name));
+      return exists ? d : { ...d, customCategories: [...(d.customCategories || []), name] };
+    });
+  }, []);
+
+  // Apaga uma categoria da lista. As contas que já usam esse nome continuam como estavam.
+  const removeCategory = useCallback((name) => {
+    setData((d) => {
+      const isCustom = (d.customCategories || []).some((c) => lower(c) === lower(name));
+      if (isCustom) return { ...d, customCategories: d.customCategories.filter((c) => lower(c) !== lower(name)) };
+      return { ...d, hiddenCategories: [...(d.hiddenCategories || []), name] };
+    });
+  }, []);
+
+  // Troca a categoria de várias contas de uma vez (as parcelas de uma conta).
+  const setBillsCategory = useCallback((ids, category) => {
+    const set = new Set(ids);
+    setData((d) => ({ ...d, bills: d.bills.map((b) => (set.has(b.id) ? { ...b, category } : b)) }));
   }, []);
 
   const saveSalary = useCallback((salary) => {
@@ -210,7 +239,7 @@ export function StoreProvider({ children }) {
       }
       bills.push({ ...b, notifId });
     }
-    setData({ notes, bills, vales: backup.vales, salary: backup.salary, customCategories: backup.customCategories });
+    setData({ notes, bills, vales: backup.vales, salary: backup.salary, customCategories: backup.customCategories, hiddenCategories: backup.hiddenCategories || [] });
   }, []);
 
   // Apaga de uma vez as contas, anotações e vales escolhidos (veja purge.js).
@@ -228,6 +257,6 @@ export function StoreProvider({ children }) {
     }));
   }, []);
 
-  const value = { deleteBills, purge, importBackup, addCategory, customCategories: data.customCategories || [], data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
+  const value = { allCategories, removeCategory, setBillsCategory, deleteBills, purge, importBackup, addCategory, customCategories: data.customCategories || [], data, notes: data.notes, bills: data.bills, salary: data.salary, saveSalary, vales: data.vales || [], addVale, deleteVale, ready, saveNote, deleteNote, addBill, addBills, updateBill, deleteBill, togglePaid };
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

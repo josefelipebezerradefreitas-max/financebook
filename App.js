@@ -22,6 +22,7 @@ import EditBillScreen from './src/screens/EditBillScreen';
 import ImportBackupScreen from './src/screens/ImportBackupScreen';
 import OverdueScreen from './src/screens/OverdueScreen';
 import PurgeScreen from './src/screens/PurgeScreen';
+import CategoriesScreen from './src/screens/CategoriesScreen';
 import { resetMonths } from './src/monthReset';
 
 const Tab = createBottomTabNavigator();
@@ -89,6 +90,7 @@ function Root() {
         <Stack.Screen name="EditarConta" component={EditBillScreen} options={{ title: 'Editar conta' }} />
         <Stack.Screen name="Atrasados" component={OverdueScreen} options={{ title: 'Atrasados' }} />
         <Stack.Screen name="ImportarBackup" component={ImportBackupScreen} options={{ title: 'Importar backup' }} />
+        <Stack.Screen name="Categorias" component={CategoriesScreen} options={{ title: 'Categorias' }} />
         <Stack.Screen name="ApagarDados" component={PurgeScreen} options={{ title: 'Apagar dados antigos' }} />
       </Stack.Navigator>
     </NavigationContainer>

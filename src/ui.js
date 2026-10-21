@@ -3,7 +3,7 @@ import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } fr
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Feather } from '@expo/vector-icons';
-import { colors, themed, getMode, categories as defaultCategories } from './theme';
+import { colors, themed, getMode } from './theme';
 import { useStore } from './store';
 import { fmtDate, fmtTime } from './format';
 
@@ -127,10 +127,10 @@ export function Chip({ label, active, onPress }) {
 // Escolha de categoria: as que já vêm no app, as que você criou e o botão "+ Nova".
 // `current` entra na lista mesmo se a categoria não existir mais (ex.: contas antigas).
 export function CategoryPicker({ value, onChange, current }) {
-  const { customCategories, addCategory } = useStore();
+  const { allCategories, addCategory } = useStore();
   const [adding, setAdding] = useState(false);
   const [name, setName] = useState('');
-  const all = [...defaultCategories, ...customCategories];
+  const all = [...allCategories];
   if (current && !all.some((c) => c.toLowerCase() === current.toLowerCase())) all.push(current);
 
   const add = () => {

@@ -28,5 +28,8 @@ export function parseBackup(raw) {
   const customCategories = Array.isArray(obj.customCategories)
     ? obj.customCategories.filter((c) => typeof c === 'string')
     : [];
-  return { ok: true, data: { notes, bills, vales, salary: obj.salary ?? null, customCategories } };
+  const hiddenCategories = Array.isArray(obj.hiddenCategories)
+    ? obj.hiddenCategories.filter((c) => typeof c === 'string')
+    : [];
+  return { ok: true, data: { notes, bills, vales, salary: obj.salary ?? null, customCategories, hiddenCategories } };
 }

@@ -65,14 +65,16 @@ export default function SettingsScreen({ navigation }) {
             title="Notificações"
             sub="Avisos na barra de notificações do celular"
             right={<Text style={st.on}>Ativas</Text>}
+            last
           />
-          <Row icon="clock" title="Hora do aviso das contas" sub="Todo aviso de conta toca às 09:00" last />
+
         </Card>
       </View>
 
       <View>
-        <Text style={st.group}>Seus dados</Text>
+        <Text style={st.group}>Contas e dados</Text>
         <Card style={{ padding: 0, overflow: 'hidden' }}>
+          <Row icon="tag" title="Categorias" sub="Adicionar ou apagar categorias" right={chevron} onPress={() => navigation.navigate('Categorias')} />
           <Row icon="download" title="Exportar backup" sub="Gerar um arquivo para salvar ou enviar" right={chevron} onPress={exportBackup} />
           <Row
             icon="upload"
