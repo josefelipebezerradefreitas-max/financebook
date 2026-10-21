@@ -87,8 +87,8 @@ export default function SettingsScreen({ navigation }) {
             sub="Por mês e ano, para deixar o app mais leve"
             right={chevron}
             onPress={() => navigation.navigate('ApagarDados')}
+            last
           />
-          <Row icon="lock" title="Onde ficam os dados" sub="Só neste celular, sem internet" last />
         </Card>
       </View>
     </Screen>
