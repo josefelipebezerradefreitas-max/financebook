@@ -34,6 +34,10 @@ export default function SummaryScreen() {
       </View>
       <View style={{ flexDirection: 'row', gap: 12 }}>
         <Card style={{ flex: 1 }}>
+          <Text style={st.smallLabel}>Receitas</Text>
+          <Text style={[st.smallValue, { color: colors.primary }]}>{money(income)}</Text>
+        </Card>
+        <Card style={{ flex: 1 }}>
           <Text style={st.smallLabel}>Despesas</Text>
           <Text style={[st.smallValue, { color: colors.red }]}>{money(expense)}</Text>
         </Card>

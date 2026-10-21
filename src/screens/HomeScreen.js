@@ -62,6 +62,10 @@ export default function HomeScreen({ navigation }) {
         <Text style={st.balanceValue}>{money(income - expense)}</Text>
         <View style={st.balanceRow}>
           <View style={st.balanceBox}>
+            <Text style={st.balanceBoxLabel}>Receitas</Text>
+            <Text style={st.balanceBoxValue}>{money(income)}</Text>
+          </View>
+          <View style={st.balanceBox}>
             <Text style={st.balanceBoxLabel}>Despesas</Text>
             <Text style={st.balanceBoxValue}>{money(expense)}</Text>
           </View>
