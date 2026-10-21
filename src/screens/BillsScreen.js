@@ -5,6 +5,7 @@ import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { confirmToggle } from '../confirm';
 import { Card, FabMenu, MonthNav, Pill, Screen, Segmented } from '../ui';
+import { useMonthResetTick } from '../monthReset';
 import { addMonths, billStatus, daysUntil, fmtShort, money, monthLabel, sameMonth } from '../format';
 
 // Para a busca ignorar maiúsculas e acentos.
@@ -21,6 +22,17 @@ export default function BillsScreen({ navigation, route }) {
   const [editing, setEditing] = useState(false);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
+
+  // Trocar de aba volta para o mês atual.
+  const resetTick = useMonthResetTick();
+  const firstRun = React.useRef(true);
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
+    setMonth(new Date());
+  }, [resetTick]);
 
   // "Ver contas" no Início abre aqui já no mês (e na aba) dos próximos vencimentos.
   useEffect(() => {

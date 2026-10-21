@@ -22,6 +22,7 @@ import EditBillScreen from './src/screens/EditBillScreen';
 import ImportBackupScreen from './src/screens/ImportBackupScreen';
 import OverdueScreen from './src/screens/OverdueScreen';
 import PurgeScreen from './src/screens/PurgeScreen';
+import { resetMonths } from './src/monthReset';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -31,6 +32,7 @@ const icons = { Início: 'home', Notas: 'file-text', Contas: 'credit-card', Resu
 function Tabs() {
   return (
     <Tab.Navigator
+      screenListeners={{ tabPress: () => resetMonths() }}
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: colors.primary,

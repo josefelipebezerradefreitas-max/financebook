@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors, themed } from '../theme';
 import { useStore } from '../store';
 import { Card, MonthNav, Screen } from '../ui';
+import { useMonthResetTick } from '../monthReset';
 import { addMonths, money, monthLabel, sameMonth } from '../format';
 import { monthWork } from '../salary';
 
 export default function SummaryScreen() {
   const { bills, salary, vales } = useStore();
   const [month, setMonth] = useState(new Date());
+
+  // Trocar de aba volta para o mês atual.
+  const resetTick = useMonthResetTick();
+  const firstRun = useRef(true);
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
+    setMonth(new Date());
+  }, [resetTick]);
 
   const inMonth = bills.filter((b) => sameMonth(new Date(b.dueDate), month));
   const pay = inMonth.filter((b) => b.kind === 'pay');
