@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors, themed } from '../theme';
@@ -13,7 +13,7 @@ const norm = (t) => {
   return typeof s.normalize === 'function' ? s.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : s;
 };
 
-export default function BillsScreen({ navigation }) {
+export default function BillsScreen({ navigation, route }) {
   const { bills, togglePaid } = useStore();
   const [kind, setKind] = useState('pay');
   const [month, setMonth] = useState(new Date());
@@ -21,6 +21,14 @@ export default function BillsScreen({ navigation }) {
   const [editing, setEditing] = useState(false);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
+
+  // "Ver contas" no Início abre aqui já no mês (e na aba) dos próximos vencimentos.
+  useEffect(() => {
+    const p = route?.params;
+    if (!p?.stamp) return;
+    if (p.month) setMonth(new Date(p.month));
+    if (p.kind) setKind(p.kind);
+  }, [route?.params?.stamp]);
 
   const list = bills
     .filter((b) => b.kind === kind && sameMonth(new Date(b.dueDate), month))

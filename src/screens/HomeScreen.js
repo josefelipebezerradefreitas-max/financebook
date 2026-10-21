@@ -144,7 +144,7 @@ export default function HomeScreen({ navigation }) {
 
       <SectionTitle
         right={
-          <Pressable onPress={() => navigation.navigate('Contas')}>
+          <Pressable onPress={() => navigation.navigate('Contas', { month: (upcoming[0] ? new Date(upcoming[0].dueDate) : now).toISOString(), kind: 'pay', stamp: Date.now() })}>
             <Text style={st.link}>Ver contas</Text>
           </Pressable>
         }
